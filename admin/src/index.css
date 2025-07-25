@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prata&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Permanent+Marker&family=Prata&display=swap');
+@import "tailwindcss";
+
+*{
+    font-family: Outfit;
+}
+
+.active{
+    background-color: rgb(141, 229, 141);
+    border-color:green ;
+}
+section,input,textarea{
+    border: 1px solid #c2c2c2;
+    outline-color: green;
+    border-radius: 4px;
+}
+.navLogo{
+    font-family: "Permanent Marker", cursive;
+  }
