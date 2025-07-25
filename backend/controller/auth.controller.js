@@ -58,7 +58,7 @@ export const Login = async(req , res) =>{
 export const getUser = async(req , res) =>{
     const userId = req.user.id;
     const user = await User.findById(userId).select("-password");
-    res.status(200).json(user);
+    res.status(200).json({ user, message: "Login successful", success : true });
 }
 export const logout = async(req , res) =>{ 
     res.status(200).json({ message: "Logout successful" });

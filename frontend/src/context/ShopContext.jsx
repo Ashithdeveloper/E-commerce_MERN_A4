@@ -29,7 +29,9 @@ const ShopContextProvider = (props) => {
       try {
         const res = await axios.get(`${backend_API}/api/auth/getme`);
         console.log(res.data);
+       if(res.data.success === true){
         setUserLogin(true);
+       }
         setUserId(res.data._id);
       } catch (error) {
         console.error("Error fetching user data:", error);
