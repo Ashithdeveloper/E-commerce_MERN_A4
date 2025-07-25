@@ -51,7 +51,7 @@ const getme = async(token)=>{
 
 
   return (
-    <div className="border-4 border-red-500 max-w-[1200px] mx-auto">
+    <div className="container border-4 border-red-500 max-w-[1200px] mx-auto">
       <div className="bg-gray-50 max-h-screen">
         {tokenAdmin === true ? (
           <>

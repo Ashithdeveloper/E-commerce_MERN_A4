@@ -9,7 +9,8 @@ export default {
         sm: "600px",
         md: "768px",
         lg: "1024px",
-        xl: "1200px", // 👈 adjust this
+        xl: "1200px",
+        "2xl": "1400px", // optional
       },
     },
   },
