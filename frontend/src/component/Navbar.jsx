@@ -39,24 +39,24 @@ const Navbar = () => {
   return (
     <div className="flex justify-between items-center py-5 font-medium">
       <Link to="/">
-        <h1 className="text-2xl font-bold navLogo ">A4-FashionStore</h1>
+        <h1 className="text-[18px] sm:text-3xl font-bold navLogo ">A4-FashionStore</h1>
       </Link>
-      <ul className="hidden sm:flex gap-5 text-sm text-gray-500">
+      <ul className="hidden sm:flex gap-5 text-lg text-gray-500">
         <NavLink to="/" className="flex flex-col items-center gap-1">
           <p>Home</p>
-          <hr className="w-2/3 broder-none h-[1.5px] bg-gray-700 hidden" />
+          <hr className="w-2/3 broder-none h-[2px] bg-gray-700 hidden" />
         </NavLink>
         <NavLink to="/collection" className="flex flex-col items-center gap-1">
           <p>Collection</p>
-          <hr className="w-2/3 broder-none h-[1.5px] bg-gray-700 hidden" />
+          <hr className="w-2/3 broder-none h-[2px] bg-gray-700 hidden" />
         </NavLink>
         <NavLink to="/about" className="flex flex-col items-center gap-1">
           <p>About</p>
-          <hr className="w-2/3 broder-none h-[1.5px] bg-gray-700 hidden" />
+          <hr className="w-2/3 broder-none h-[2px] bg-gray-700 hidden" />
         </NavLink>
         <NavLink to="/contact" className="flex flex-col items-center gap-1">
           <p>Contact</p>
-          <hr className="w-2/3 broder-none h-[1.5px] bg-gray-700 hidden " />
+          <hr className="w-2/3 broder-none h-[2px] bg-gray-700 hidden " />
         </NavLink>
       </ul>
       <div className="flex items-center gap-5">
