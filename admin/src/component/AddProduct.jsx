@@ -160,281 +160,286 @@ const AddProduct = ({token}) => {
   };
 
   return loading ? (
-    <form
-      className="flex flex-col w-full items-start gap-3"
-      onSubmit={edit ? updateProduct : addProduct}
-    >
-      <div>
-        <p className="mb-2">Upload Image</p>
-
-        <div className="flex gap-2">
-          <label htmlFor="image1">
-            <img
-              className="w-20"
-              src={
-                image1
-                  ? typeof image1 === "string"
-                    ? image1
-                    : URL.createObjectURL(image1)
-                  : assets.upload_area
-              }
-              alt=""
-            />
-            <input
-              type="file"
-              id="image1"
-              name="image1"
-              hidden
-              onChange={(e) => setImage1(e.target.files[0])}
-            />
-          </label>
-          <label htmlFor="image2">
-            <img
-              className="w-20"
-              src={
-                image2
-                  ? typeof image2 === "string"
-                    ? image2
-                    : URL.createObjectURL(image2)
-                  : assets.upload_area
-              }
-              alt=""
-            />
-            <input
-              type="file"
-              id="image2"
-              name="image2"
-              hidden
-              onChange={(e) => setImage2(e.target.files[0])}
-            />
-          </label>
-          <label htmlFor="image3">
-            <img
-              className="w-20"
-              src={
-                image3
-                  ? typeof image3 === "string"
-                    ? image3
-                    : URL.createObjectURL(image3)
-                  : assets.upload_area
-              }
-              alt=""
-            />
-            <input
-              type="file"
-              id="image3"
-              name="image3"
-              hidden
-              onChange={(e) => setImage3(e.target.files[0])}
-            />
-          </label>
-          <label htmlFor="image4">
-            <img
-              className="w-20"
-              src={
-                image4
-                  ? typeof image4 === "string"
-                    ? image4
-                    : URL.createObjectURL(image4)
-                  : assets.upload_area
-              }
-              alt=""
-            />
-            <input
-              type="file"
-              id="image4"
-              name="image4"
-              hidden
-              onChange={(e) => setImage4(e.target.files[0])}
-            />
-          </label>
-        </div>
-      </div>
-
-      <div className="w-full">
-        <p className="mb-2">Product Name</p>
-        <input
-          className="w-full max-w-[500px] px-3 py-2"
-          type="text"
-          placeholder="Product Name"
-          value={productname}
-          onChange={(e) => setProductname(e.target.value)}
-        />
-      </div>
-
-      <div className="w-full">
-        <p className="mb-2">Product description</p>
-        <textarea
-          className="w-full max-w-[500px] px-3 py-2"
-          type="text"
-          placeholder="Product description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-      </div>
-
-      <div className="flex flex-col sm:flex-row gap-2 w-full sm:gap-8">
+    <div className="w-full px-4 sm:px-6 lg:px-8 max-w-[1200px] mx-auto">
+      <form
+        className="flex flex-col w-full items-start gap-3"
+        onSubmit={edit ? updateProduct : addProduct}
+      >
         <div>
-          <p className="mb-2">Product Category</p>
-          <select
-            className="w-full px-3 py-2"
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            <option value="Men">Men</option>
-            <option value="Women">Women</option>
-            <option value="Kids">Kids</option>
-          </select>
-        </div>
-        <div>
-          <p className="mb-2">Product SubCategory</p>
-          <select
-            className="w-full px-3 py-2"
-            onChange={(e) => setSubcategory(e.target.value)}
-          >
-            <option value="Topwear">Topwear</option>
-            <option value="Bottomwear">Bottomwear</option>
-            <option value="Winterwear">Winterwear</option>
-          </select>
+          <p className="mb-2">Upload Image</p>
+
+          <div className="flex gap-2">
+            <label htmlFor="image1">
+              <img
+                className="w-20"
+                src={
+                  image1
+                    ? typeof image1 === "string"
+                      ? image1
+                      : URL.createObjectURL(image1)
+                    : assets.upload_area
+                }
+                alt=""
+              />
+              <input
+                type="file"
+                id="image1"
+                name="image1"
+                hidden
+                onChange={(e) => setImage1(e.target.files[0])}
+              />
+            </label>
+            <label htmlFor="image2">
+              <img
+                className="w-20"
+                src={
+                  image2
+                    ? typeof image2 === "string"
+                      ? image2
+                      : URL.createObjectURL(image2)
+                    : assets.upload_area
+                }
+                alt=""
+              />
+              <input
+                type="file"
+                id="image2"
+                name="image2"
+                hidden
+                onChange={(e) => setImage2(e.target.files[0])}
+              />
+            </label>
+            <label htmlFor="image3">
+              <img
+                className="w-20"
+                src={
+                  image3
+                    ? typeof image3 === "string"
+                      ? image3
+                      : URL.createObjectURL(image3)
+                    : assets.upload_area
+                }
+                alt=""
+              />
+              <input
+                type="file"
+                id="image3"
+                name="image3"
+                hidden
+                onChange={(e) => setImage3(e.target.files[0])}
+              />
+            </label>
+            <label htmlFor="image4">
+              <img
+                className="w-20"
+                src={
+                  image4
+                    ? typeof image4 === "string"
+                      ? image4
+                      : URL.createObjectURL(image4)
+                    : assets.upload_area
+                }
+                alt=""
+              />
+              <input
+                type="file"
+                id="image4"
+                name="image4"
+                hidden
+                onChange={(e) => setImage4(e.target.files[0])}
+              />
+            </label>
+          </div>
         </div>
 
-        <div>
-          <p className="mb-2">Product Price</p>
+        <div className="w-full">
+          <p className="mb-2">Product Name</p>
           <input
-            className="w-full px-3 py-2 sm:w-[120px] "
-            type="number"
-            placeholder="Price"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            className="w-full max-w-[500px] px-3 py-2"
+            type="text"
+            placeholder="Product Name"
+            value={productname}
+            onChange={(e) => setProductname(e.target.value)}
           />
         </div>
-      </div>
-      <div>
-        <p className="mb-2">Product Sizes</p>
-        <div className="flex gap-3">
-          <div
-            onClick={() =>
-              setSizes((prev) =>
-                prev.includes("S")
-                  ? prev.filter((item) => item !== "S")
-                  : [...prev, "S"]
-              )
-            }
-          >
-            <p
-              className={`${
-                sizes.includes("S") ? "bg-green-400" : "bg-slate-200"
-              } px-3 py-1 cursor-pointer`}
+
+        <div className="w-full">
+          <p className="mb-2">Product description</p>
+          <textarea
+            className="w-full max-w-[500px] px-3 py-2"
+            type="text"
+            placeholder="Product description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:gap-8">
+          <div>
+            <p className="mb-2">Product Category</p>
+            <select
+              className="w-full px-3 py-2"
+              onChange={(e) => setCategory(e.target.value)}
             >
-              S
-            </p>
+              <option value="Men">Men</option>
+              <option value="Women">Women</option>
+              <option value="Kids">Kids</option>
+            </select>
           </div>
-          <div
-            onClick={() =>
-              setSizes((prev) =>
-                prev.includes("M")
-                  ? prev.filter((item) => item !== "M")
-                  : [...prev, "M"]
-              )
-            }
-          >
-            <p
-              className={`${
-                sizes.includes("M") ? "bg-green-400" : "bg-slate-200"
-              } px-3 py-1 cursor-pointer`}
+          <div>
+            <p className="mb-2">Product SubCategory</p>
+            <select
+              className="w-full px-3 py-2"
+              onChange={(e) => setSubcategory(e.target.value)}
             >
-              M
-            </p>
+              <option value="Topwear">Topwear</option>
+              <option value="Bottomwear">Bottomwear</option>
+              <option value="Winterwear">Winterwear</option>
+            </select>
           </div>
-          <div
-            onClick={() =>
-              setSizes((prev) =>
-                prev.includes("L")
-                  ? prev.filter((item) => item !== "L")
-                  : [...prev, "L"]
-              )
-            }
-          >
-            <p
-              className={`${
-                sizes.includes("L") ? "bg-green-400" : "bg-slate-200"
-              } px-3 py-1 cursor-pointer`}
-            >
-              L
-            </p>
-          </div>
-          <div
-            onClick={() =>
-              setSizes((prev) =>
-                prev.includes("XL")
-                  ? prev.filter((item) => item !== "XL")
-                  : [...prev, "XL"]
-              )
-            }
-          >
-            <p
-              className={`${
-                sizes.includes("XL") ? "bg-green-400" : "bg-slate-200"
-              } px-3 py-1 cursor-pointer`}
-            >
-              XL
-            </p>
-          </div>
-          <div
-            onClick={() =>
-              setSizes((prev) =>
-                prev.includes("XXL")
-                  ? prev.filter((item) => item !== "XXL")
-                  : [...prev, "XXL"]
-              )
-            }
-          >
-            <p
-              className={`${
-                sizes.includes("XXL") ? "bg-green-400" : "bg-slate-200"
-              } px-3 py-1 cursor-pointer`}
-            >
-              XXL
-            </p>
+
+          <div>
+            <p className="mb-2">Product Price</p>
+            <input
+              className="w-full px-3 py-2 sm:w-[120px] "
+              type="number"
+              placeholder="Price"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            />
           </div>
         </div>
-      </div>
+        <div>
+          <p className="mb-2">Product Sizes</p>
+          <div className="flex gap-3">
+            <div
+              onClick={() =>
+                setSizes((prev) =>
+                  prev.includes("S")
+                    ? prev.filter((item) => item !== "S")
+                    : [...prev, "S"]
+                )
+              }
+            >
+              <p
+                className={`${
+                  sizes.includes("S") ? "bg-green-400" : "bg-slate-200"
+                } px-3 py-1 cursor-pointer`}
+              >
+                S
+              </p>
+            </div>
+            <div
+              onClick={() =>
+                setSizes((prev) =>
+                  prev.includes("M")
+                    ? prev.filter((item) => item !== "M")
+                    : [...prev, "M"]
+                )
+              }
+            >
+              <p
+                className={`${
+                  sizes.includes("M") ? "bg-green-400" : "bg-slate-200"
+                } px-3 py-1 cursor-pointer`}
+              >
+                M
+              </p>
+            </div>
+            <div
+              onClick={() =>
+                setSizes((prev) =>
+                  prev.includes("L")
+                    ? prev.filter((item) => item !== "L")
+                    : [...prev, "L"]
+                )
+              }
+            >
+              <p
+                className={`${
+                  sizes.includes("L") ? "bg-green-400" : "bg-slate-200"
+                } px-3 py-1 cursor-pointer`}
+              >
+                L
+              </p>
+            </div>
+            <div
+              onClick={() =>
+                setSizes((prev) =>
+                  prev.includes("XL")
+                    ? prev.filter((item) => item !== "XL")
+                    : [...prev, "XL"]
+                )
+              }
+            >
+              <p
+                className={`${
+                  sizes.includes("XL") ? "bg-green-400" : "bg-slate-200"
+                } px-3 py-1 cursor-pointer`}
+              >
+                XL
+              </p>
+            </div>
+            <div
+              onClick={() =>
+                setSizes((prev) =>
+                  prev.includes("XXL")
+                    ? prev.filter((item) => item !== "XXL")
+                    : [...prev, "XXL"]
+                )
+              }
+            >
+              <p
+                className={`${
+                  sizes.includes("XXL") ? "bg-green-400" : "bg-slate-200"
+                } px-3 py-1 cursor-pointer`}
+              >
+                XXL
+              </p>
+            </div>
+          </div>
+        </div>
 
-      <div className="flex mt-2 gap-3">
-        <input
-          type="checkbox"
-          id="bestseller"
-          checked={bestseller}
-          onChange={() => setBestseller((prev) => !prev)}
-        />
-        <label className="cursor-pointer" htmlFor="bestseller">
-          Add as bestseller
-        </label>
-      </div>
+        <div className="flex mt-2 gap-3">
+          <input
+            type="checkbox"
+            id="bestseller"
+            checked={bestseller}
+            onChange={() => setBestseller((prev) => !prev)}
+          />
+          <label className="cursor-pointer" htmlFor="bestseller">
+            Add as bestseller
+          </label>
+        </div>
 
-      <div className="flex justify-center gap-5">
-        {edit === false ? (
-          <button type="submit" className="w-30 py-3 mt-4 bg-black text-white ">
-            Add Product
-          </button>
-        ) : (
-          <button
-            type="submit"
-            className="w-30 py-3 mt-4 bg-green-500 text-white "
-          >
-            Update
-          </button>
-        )}
-        {edit === true && (
-          <button
-            type="submit"
-            className="w-30 py-3 mt-4 bg-red-600 text-white "
-            onClick={cancel}
-          >
-            Cancel
-          </button>
-        )}
-      </div>
-    </form>
+        <div className="flex justify-center gap-5">
+          {edit === false ? (
+            <button
+              type="submit"
+              className="w-30 py-3 mt-4 bg-black text-white "
+            >
+              Add Product
+            </button>
+          ) : (
+            <button
+              type="submit"
+              className="w-30 py-3 mt-4 bg-green-500 text-white "
+            >
+              Update
+            </button>
+          )}
+          {edit === true && (
+            <button
+              type="submit"
+              className="w-30 py-3 mt-4 bg-red-600 text-white "
+              onClick={cancel}
+            >
+              Cancel
+            </button>
+          )}
+        </div>
+      </form>
+    </div>
   ) : (
     <Loading />
   );
