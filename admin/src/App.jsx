@@ -51,32 +51,26 @@ const getme = async(token)=>{
 
 
   return (
-    <div className='container'>
-      <div className="bg-gray-50 min-h-screen">
-        {tokenAdmin === true ? (
-          <>
-            <Navbar
-              setToken={setToken}
-              setTokenAdmin={setTokenAdmin}
-              getme={getme}
-            />
-            <hr />
+    <div className="bg-gray-50 max-h-screen">
+      {tokenAdmin === true ? (
+        <>
+          <Navbar setToken={setToken} setTokenAdmin={setTokenAdmin} getme={getme}   />
+          <hr />
 
-            <div className="flex w-full">
-              <SideBar />
-              <div className="w-[70%] mx-auto ml-[max(5vw,25px)] my-8 text-gray-600 text-base">
-                <Routes>
-                  <Route path="/" element={<AddProduct token={token} />} />
-                  <Route path="/list" element={<ListProduct token={token} />} />
-                  <Route path="/orders" element={<OrderList token={token} />} />
-                </Routes>
-              </div>
+          <div className="flex w-full">
+            <SideBar />
+            <div className="w-[70%] mx-auto ml-[max(5vw,25px)] my-8 text-gray-600 text-base">
+              <Routes>
+                <Route path="/" element={<AddProduct token={token} />} />
+                <Route path="/list" element={<ListProduct token={token} />} />
+                <Route path="/orders" element={<OrderList token={token} />} />
+              </Routes>
             </div>
-          </>
-        ) : (
-          <Login setToken={setToken} setTokenAdmin={setTokenAdmin} />
-        )}
-      </div>
+          </div>
+        </>
+      ) : (
+        <Login setToken={setToken} setTokenAdmin={setTokenAdmin} />
+      )}
     </div>
   );
 };
