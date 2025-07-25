@@ -160,7 +160,7 @@ const AddProduct = ({token}) => {
   };
 
   return loading ? (
-    <div className="w-full px-4 sm:px-6 lg:px-8 max-w-[1200px] mx-auto">
+    <div className="container">
       <form
         className="flex flex-col w-full items-start gap-3"
         onSubmit={edit ? updateProduct : addProduct}
