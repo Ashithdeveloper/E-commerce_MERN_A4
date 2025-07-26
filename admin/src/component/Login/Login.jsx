@@ -8,10 +8,12 @@ import { toast } from 'react-toastify';
 const Login = ({setToken}) => {
   const [ username , setUsername] = useState("");
   const [ password , setPassword] = useState("");
+  const [ loginLoading , setLoginLoading] = useState(false);
   
   
   const onSubmit = async (e) => {
     e.preventDefault();
+    setLoginLoading(true);
     try {
       console.log(username, password);
       const response = await axios.post(
@@ -29,9 +31,11 @@ const Login = ({setToken}) => {
       setToken(token);
       localStorage.setItem("token", token);
       toast.success("Login successful!");
+      setLoginLoading(false);
     } else {
       console.warn("No token received from server");
       toast.error(response.data?.message || "Login failed!");
+      setLoginLoading(false);
     }
     } catch (error) {
       toast.error("Login failed!");
@@ -40,6 +44,7 @@ const Login = ({setToken}) => {
         error.response?.data?.message || error.message
       );
     }
+    setLoginLoading(false);
   };
   
   return (
@@ -71,7 +76,7 @@ const Login = ({setToken}) => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <button className='mt-2 w-full py-2 px-4 rounded-md text-white bg-black' type="submit">Login</button>
+          <button className='mt-2 w-full py-2 px-4 rounded-md text-white bg-black' type="submit">{loginLoading ? "Logging in..." : "Login"}</button>
         </form>
       </div>
     </div>
