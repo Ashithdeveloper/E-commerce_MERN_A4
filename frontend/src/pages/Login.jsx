@@ -4,6 +4,7 @@ import { Form } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { shopContext } from '../context/ShopContext'
 import axios from 'axios'
+import { backend_API } from '../config'
 
 
 const Login = () => {
@@ -26,7 +27,7 @@ const Login = () => {
       console.log(data);
       try {
         const response = await axios.post(
-          "http://localhost:4000/api/auth/signup",
+          `${backend_API}/api/auth/signup`,
           data
         );
         const res = response.data;
@@ -54,7 +55,7 @@ const Login = () => {
       console.log(data);
       try {
         const response = await axios.post(
-          "http://localhost:4000/api/auth/login",
+          `${backend_API}/api/auth/login`,
            data
         );
         const res = response.data;
