@@ -4,6 +4,7 @@ import { NavLink, Link, useNavigate } from "react-router-dom";
 import { shopContext } from "../context/ShopContext.jsx";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { backend_API } from "../config.js";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -19,7 +20,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const logout = async () => {
     try {
-      const res = await axios.post("http://localhost:4000/api/auth/logout", {});
+      const res = await axios.post(`${backend_API}/api/auth/logout`, {});
       const data = res.data;
       localStorage.removeItem("token");
       showCartsData();
