@@ -16,10 +16,11 @@ import { ToastContainer } from "react-toastify";
 import { useContext, useEffect } from 'react'
 import { shopContext } from './context/ShopContext'
 import axios from 'axios'
+import WebLoading from './component/WebLoading'
 
 function App() {
   
-  const { getme, fetchProducts, fetchSearch } = useContext(shopContext); 
+  const { getme, fetchProducts, fetchSearch ,webDataLoading } = useContext(shopContext); 
   
 
   axios.interceptors.request.use((config) => {
@@ -39,25 +40,31 @@ function App() {
 
   return (
     <>
-     <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
-      <ToastContainer autoClose={1000} position='top-center'/>
-      <Navbar/>
-      <SearchBar/>
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/collection' element={<Collection />} />
-        <Route path='/product/:productId' element={<Product />} />
-        <Route path='/cart' element={<Cart />} />
-        <Route path='/placeorder' element={<Placeorder />} />
-        <Route path='/about' element={<About />}/>
-        <Route path='/contact' element={<Contact />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/orders' element={<Orders/>} />
-      </Routes>
-      <Footer/>
-     </div>
+      {webDataLoading ? (
+        <WebLoading />
+      ) : (
+        <>
+          <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
+            <ToastContainer autoClose={1000} position="top-center" />
+            <Navbar />
+            <SearchBar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/collection" element={<Collection />} />
+              <Route path="/product/:productId" element={<Product />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/placeorder" element={<Placeorder />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/orders" element={<Orders />} />
+            </Routes>
+            <Footer />
+          </div>
+        </>
+      )}
     </>
-  )
+  );
 }
 
 export default App

@@ -23,34 +23,41 @@ const ShopContextProvider = (props) => {
     const [ productCount , setProductCount ] = useState(0);
     const [ totalProductPrice , setTotalProductPrice ] = useState(0);
      const [cartData, setCartData] = useState([]);
+     const [ webDataLoading , setWebDataLoading ] = useState(false);
 
     //verify user in backend GetMe API 
     const getme = async () => {
+      setWebDataLoading(true);  
       try {
         const res = await axios.get(`${backend_API}/api/auth/getme`);
         console.log(res.data);
        if(res.data.success === true){
         setUserLogin(true);
+        setWebDataLoading(false);
        }
         setUserId(res.data._id);
       } catch (error) {
         console.error("Error fetching user data:", error);
         return null;
       }
+      setWebDataLoading(false);
     };
 
    //Get all products
     const fetchProducts = async () => {
       try {
+        setWebDataLoading(true);
         const response = await axios.get(
           `${backend_API}/api/product/getallproducts`,
           {}
         );
         const result = response.data;
         setProductAPI(result.products);
+        setWebDataLoading(false);
       } catch (error) {
         console.log("Error fetching products",error);
       }
+      setWebDataLoading(false);
     };
    //Search product API
     const fetchSearch = async () => {
@@ -163,7 +170,8 @@ const ShopContextProvider = (props) => {
       setTotalProductPrice,
       showCartsData,
       cartData,
-      setCartData
+      setCartData,
+      webDataLoading
     };
     return (
         <shopContext.Provider value={value}>
