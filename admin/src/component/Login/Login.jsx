@@ -61,6 +61,7 @@ const Login = ({setToken}) => {
               className="rounded-md w-full px-3 py-2 border border-gray-300 outline-none "
               placeholder="Enter Admin_UserName"
               required
+              value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
           </div>
@@ -73,6 +74,7 @@ const Login = ({setToken}) => {
               className="rounded-md w-full px-3 py-2 border border-gray-300 outline-none "
               placeholder="Enter Admin_Password"
               required
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
