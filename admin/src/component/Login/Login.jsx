@@ -6,8 +6,8 @@ import { toast } from 'react-toastify';
 
 
 const Login = ({setToken}) => {
-  const [ username , setUsername] = useState("");
-  const [ password , setPassword] = useState("");
+  const [ username , setUsername] = useState("admin");
+  const [password, setPassword] = useState("secret123");
   const [ loginLoading , setLoginLoading] = useState(false);
   
   
@@ -69,7 +69,7 @@ const Login = ({setToken}) => {
               Admin_Password :
             </p>
             <input
-              type="text"
+              type="password"
               className="rounded-md w-full px-3 py-2 border border-gray-300 outline-none "
               placeholder="Enter Admin_Password"
               required

@@ -11,7 +11,6 @@ const BestSeller = () => {
         const bestProduct = products.filter((item) => item.bestseller);
         setBestSellers(bestProduct.slice(0, 5));
     },[products])
-    console.log(bestSellers);
 
   return (
     <div className="my-[-30px]">

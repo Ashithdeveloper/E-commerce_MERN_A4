@@ -31,6 +31,9 @@ const ListProduct = ({token}) => {
   }
 
   const deleteProduct = async (id) => {
+    if(list.length === 5){
+      return toast.error("You can't delete more ");
+    }
     try {
       const response = await axios.delete(
         `${backendurl}/api/product/delete/${id}`,

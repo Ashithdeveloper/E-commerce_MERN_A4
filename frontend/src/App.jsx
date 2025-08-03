@@ -41,7 +41,9 @@ function App() {
   return (
     <>
       {webDataLoading ? (
-        <WebLoading />
+        <div className='h-screen flex justify-center items-center'>
+          <WebLoading />
+        </div>
       ) : (
         <>
           <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">

@@ -40,7 +40,9 @@ const Navbar = () => {
   return (
     <div className="flex justify-between items-center py-5 font-medium">
       <Link to="/">
-        <h1 className="text-[18px] sm:text-3xl font-bold navLogo ">A4-FashionStore</h1>
+        <h1 className="text-[18px] sm:text-3xl font-bold navLogo ">
+          A4-FashionStore
+        </h1>
       </Link>
       <ul className="hidden sm:flex gap-5 text-lg text-gray-500">
         <NavLink to="/" className="flex flex-col items-center gap-1">
@@ -60,6 +62,11 @@ const Navbar = () => {
           <hr className="w-2/3 broder-none h-[2px] bg-gray-700 hidden " />
         </NavLink>
       </ul>
+      <div className="shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] p-2 rounded-[15px]">
+        <button>
+          <a href="https://e-commerce-mern-a4.vercel.app/">Admin Panel</a>
+        </button>
+      </div>
       <div className="flex items-center gap-5">
         <img
           onClick={() => searchHandler()}
@@ -82,7 +89,7 @@ const Navbar = () => {
             <div className="hidden group-hover:block absolute dropdown-menu right-0 pt-0 ">
               <div className="flex flex-col gap-2 w-36 py-2 px-5 bg-slate-100 text-gray-500 rounded">
                 <p className="p-2 hover:text-black">My Profile</p>
-                <Link to='/orders'>
+                <Link to="/orders">
                   <p className="p-2 hover:text-black">Orders</p>
                 </Link>
                 <p className="p-2 hover:text-black" onClick={logout}>

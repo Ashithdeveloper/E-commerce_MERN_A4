@@ -30,7 +30,7 @@ const ShopContextProvider = (props) => {
       setWebDataLoading(true);  
       try {
         const res = await axios.get(`${backend_API}/api/auth/getme`);
-        console.log(res.data);
+        // console.log(res.data);
        if(res.data.success === true){
         setUserLogin(true);
         setWebDataLoading(false);
@@ -72,9 +72,9 @@ const ShopContextProvider = (props) => {
           `${backend_API}/api/product/search?q=${search}`
         );
         const result = response.data;
-        console.log("Full response:", response.data);
+        // console.log("Full response:", response.data);
         setSearched(result.products);
-        console.log("Search result:", result.products);
+        // console.log("Search result:", result.products);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -107,7 +107,7 @@ const ShopContextProvider = (props) => {
             sizes: size,
           }
         );
-        console.log(cart.data);
+        // console.log(cart.data);
         showCartsData();
         toast.success(cart.data.message);
       } catch (error) {
@@ -129,7 +129,7 @@ const ShopContextProvider = (props) => {
           setCartData(response.data.cart);
           setProductCount(response.data.totalQuantity);
           setTotalProductPrice(response.data.totalPrice);
-          console.log(response.data.totalQuantity);
+          // console.log(response.data.totalQuantity);
         } catch (error) {
           console.log(error);
         }
