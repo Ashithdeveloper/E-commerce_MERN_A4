@@ -53,6 +53,9 @@ const ListProduct = ({token}) => {
 
   const updateProduct = (id) => {
      try {
+        if (list.length === 5) {
+          return toast.error("You can't delete more ");
+        }
        const edit = list.find((item) => item._id === id);
        if(!edit){
         return toast.error("Product not found");
