@@ -10,53 +10,52 @@ import { useEffect, useState } from 'react'
 import Login from './component/Login/Login'
 import { backendurl } from './config'
 import axios from 'axios'
-
+import Loading from './component/Loading'
 
 
 
 const App = () => {
-
-  const [ token , setToken ] = useState("");
-  const [ tokenAdmin , setTokenAdmin ] = useState(false);
-useEffect(() => {
-const tokenFromStorage = localStorage.getItem("token");
-if (tokenFromStorage) {
-  setToken(tokenFromStorage);
-  console.log(tokenFromStorage);
-  getme(tokenFromStorage); 
-}
-},[token]);
-
-const getme = async(token)=>{
-  try {
-    console.log(token);
-    const res = await axios.get(`${backendurl}/api/auth/getadmin`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (res.data.success === true) {
-      setTokenAdmin(true);
+  const [token, setToken] = useState("");
+  const [tokenAdmin, setTokenAdmin] = useState(false);
+  const [webDataLoading, setWebDataLoading] = useState(false);
+  useEffect(() => {
+    const tokenFromStorage = localStorage.getItem("token");
+    if (tokenFromStorage) {
+      setToken(tokenFromStorage);
+      console.log(tokenFromStorage);
+      getme(tokenFromStorage);
     }
-    if (res.data.success === false) {
+  }, [token]);
+
+  const getme = async (token) => {
+    try {
+      console.log(token);
+      setWebDataLoading(true);
+      const res = await axios.get(`${backendurl}/api/auth/getadmin`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (res.data.success === true) {
+        setTokenAdmin(true);
+      }
+      if (res.data.success === false) {
+        setTokenAdmin(false);
+      }
+      setWebDataLoading(false);
+    } catch (error) {
+      console.log(error);
       setTokenAdmin(false);
+      setWebDataLoading(false);
     }
-  } catch (error) {
-    console.log(error);
-    setTokenAdmin(false);
-  }
-}
+  };
 
- 
-
-
-  return (
+  return webDataLoading ? (
+    <Loading />
+  ) : (
     <div className="container mx-auto">
-      {/* <p className="text-xs text-gray-400">
-        Width debug: {window.innerWidth}px
-      </p> */}
       <div className="bg-gray-50 max-h-screen">
-        {tokenAdmin === true ? (
+        {tokenAdmin ? (
           <>
             <Navbar
               setToken={setToken}
@@ -64,7 +63,6 @@ const getme = async(token)=>{
               getme={getme}
             />
             <hr />
-
             <div className="flex w-full">
               <SideBar />
               <div className="w-[70%] mx-auto ml-[max(5vw,25px)] my-8 text-gray-600 text-base">

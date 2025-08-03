@@ -62,7 +62,7 @@ const Navbar = () => {
           <hr className="w-2/3 broder-none h-[2px] bg-gray-700 hidden " />
         </NavLink>
       </ul>
-      <div className="shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] p-2 rounded-[15px]">
+      <div className="shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] p-2 rounded-[15px] sm:block hidden ">
         <button>
           <a href="https://e-commerce-mern-a4.vercel.app/">Admin Panel</a>
         </button>
@@ -154,6 +154,12 @@ const Navbar = () => {
           >
             contact
           </NavLink>
+          <a
+            onClick={() => setOpen(!open)}
+            className="py-2 pl-6 border"
+          >
+            <a href="https://e-commerce-mern-a4.vercel.app/">Admin Panel</a>
+          </a>
         </div>
       </div>
     </div>
