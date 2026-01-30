@@ -173,10 +173,25 @@ export const updateProduct = async (req, res) => {
     const currentImages = product.image || ["", "", "", ""];
     const updatedImages = [...currentImages];
 
-    if (req.files?.image1) updatedImages[0] = req.files.image1[0].path;
-    if (req.files?.image2) updatedImages[1] = req.files.image2[0].path;
-    if (req.files?.image3) updatedImages[2] = req.files.image3[0].path;
-    if (req.files?.image4) updatedImages[3] = req.files.image4[0].path;
+  for (let i = 1; i <= 4; i++) {
+    const imageField = `image${i}`;
+    if (req.files?.[imageField]) {
+      const oldImageUrl = updatedImages[i - 1];
+
+      // Delete the old image from Cloudinary if it's from Cloudinary
+      if (oldImageUrl && oldImageUrl.includes("cloudinary")) {
+        try {
+          const publicId = oldImageUrl.split("/").pop().split(".")[0];
+          await cloudinary.uploader.destroy(publicId);
+        } catch (err) {
+          console.log(`Error deleting old image${i}:`, err);
+        }
+      }
+
+      // Set new uploaded image path
+      updatedImages[i - 1] = req.files[imageField][0].path;
+    }
+  }
 
     product.image = updatedImages.filter(Boolean);
 
