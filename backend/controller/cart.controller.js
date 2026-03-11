@@ -171,7 +171,7 @@ export const removeFromCart = async (req, res) => {
        user.cart[productId][size] = quantity;
      }
 
-     // ✅ Tell Mongoose to watch this object
+     // Tell Mongoose to watch this object
      user.markModified("cart");
 
      await user.save();
