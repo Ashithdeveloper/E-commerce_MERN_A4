@@ -1,7 +1,7 @@
 import express from 'express';
 import userMiddleWare from '../middleWare/UserMiddleware.js';
 import { createOrder, getAllOrders, getUserOrders, updateOrder } from '../controller/order.controller.js';
-import adminMiddleware from '../middleWare/adminMiddleware.js';
+import adminMiddleware, { requirePermission } from '../middleWare/adminMiddleware.js';
 
 
 const router = express.Router();
@@ -12,8 +12,8 @@ router.post('/ordercod', userMiddleWare, createOrder );
 router.get("/userorders", userMiddleWare, getUserOrders);
 
 //admin 
-router.get('/getallorder' , adminMiddleware , getAllOrders);
-router.put('/updateorder', adminMiddleware, updateOrder);
+router.get('/getallorder', adminMiddleware, requirePermission("orderManagement"), getAllOrders);
+router.put('/updateorder', adminMiddleware, requirePermission("orderManagement"), updateOrder);
 
 
-export default router
+export default router;

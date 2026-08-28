@@ -1,7 +1,7 @@
 import express from "express";
 import { createProduct, deleteProduct, getAllProduct, getOneProduct, searchProducts, updateProduct } from "../controller/product.controller.js";
 import upload from "../middleWare/upload.js";
-import adminMiddleware from "../middleWare/adminMiddleware.js";
+import adminMiddleware, { requirePermission } from "../middleWare/adminMiddleware.js";
 
 
 const router = express.Router();
@@ -15,9 +15,9 @@ const uploadFields = upload.fields([
 ]);
 
 //Admin Product router
-router.post("/create",adminMiddleware ,uploadFields,createProduct);
-router.delete("/delete/:id",adminMiddleware ,deleteProduct);
-router.put("/update/:id", adminMiddleware,uploadFields, updateProduct);
+router.post("/create", adminMiddleware, requirePermission("addProduct"), uploadFields, createProduct);
+router.delete("/delete/:id", adminMiddleware, requirePermission("listProducts"), deleteProduct);
+router.put("/update/:id", adminMiddleware, requirePermission("addProduct"), uploadFields, updateProduct);
 
 
 //userProduct router
@@ -25,4 +25,4 @@ router.get("/getOne/:id", getOneProduct);
 router.get("/getallproducts", getAllProduct);
 router.get("/search" , searchProducts);
 
-export default router
+export default router;

@@ -6,10 +6,10 @@ export const generateToken = (userId) => {
   });
 };
 
-export const generateTokenAdmin = () => {
-  return jwt.sign({ role: "admin" }, process.env.JWT_SECRET, {
-    expiresIn: "1h",
+export const generateTokenAdmin = (payload = { role: "superadmin" }) => {
+  return jwt.sign(payload, process.env.JWT_SECRET, {
+    expiresIn: "1d",
   });
 };
 
-export default { generateToken, generateTokenAdmin }
+export default { generateToken, generateTokenAdmin };
