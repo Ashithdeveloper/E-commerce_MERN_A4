@@ -41,8 +41,8 @@ function App() {
   return (
     <>
       {webDataLoading ? (
-        <div className='h-screen flex justify-center items-center'>
-          <WebLoading />
+        <div className="min-h-screen flex items-center justify-center bg-gray-50/50">
+          <WebLoading message="Loading store catalog..." />
         </div>
       ) : (
         <>
