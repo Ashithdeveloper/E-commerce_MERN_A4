@@ -1,9 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Title from "../component/Title";
-import CardTotal from "../component/CartTotal";
+import CartTotal from "../component/CartTotal";
 import { assets } from "../assets/frontend_assets/assets";
-import { useState } from "react";
-import { useContext } from "react";
 import { shopContext } from "../context/ShopContext";
 import axios from "axios";
 import { backend_API } from "../config";
@@ -22,6 +20,9 @@ const Placeorder = () => {
     address: "",
     phone: "",
   });
+  const [method, setMethod] = useState("cod");
+  const [loading, setLoading] = useState(false);
+
   const {
     navigate,
     cartData,
@@ -30,6 +31,7 @@ const Placeorder = () => {
     delivery_fee,
     showCartsData,
   } = useContext(shopContext);
+
   const indiaData = {
     name: "India",
     states: [
@@ -71,41 +73,44 @@ const Placeorder = () => {
       "West Bengal",
     ],
   };
-  const [districtData, setDistrictData] = useState([]);
-useEffect(() => {
-  const selected = District.states.find(
-    (item) => item.state === placeData.state
-  );
-  setDistrictData(selected ? selected.districts : []);
 
-}, [placeData.state]);
- 
+  const [districtData, setDistrictData] = useState([]);
+
+  useEffect(() => {
+    const selected = District.states?.find(
+      (item) => item.state === placeData.state
+    );
+    setDistrictData(selected ? selected.districts : []);
+  }, [placeData.state]);
 
   const orderData = (e) => {
-    e.preventDefault();
-    const name = e.target.name;
-    const value = e.target.value;
+    const { name, value } = e.target;
     setPlaceData((prev) => ({ ...prev, [name]: value }));
   };
 
-
   const submitData = async (e) => {
     e.preventDefault();
-    if (!placeData.firstName || !placeData.email || !placeData.state) {
-      alert("Please fill in all required fields.");
+    if (!placeData.firstName || !placeData.email || !placeData.state || !placeData.address || !placeData.phone) {
+      toast.warning("Please fill in all required delivery fields.");
       return;
     }
-    console.log("Submitted Data:", placeData);
+
+    if (!cartData || cartData.length === 0) {
+      toast.error("Your cart is empty!");
+      return;
+    }
+
+    setLoading(true);
     try {
       let orderItems = [];
 
       cartData.forEach((item) => {
-        Object.entries(item.sizes).forEach(([size, quantity]) => {
+        Object.entries(item.sizes || {}).forEach(([size, quantity]) => {
           if (quantity > 0) {
             const itemInfo = {
               _id: item._id,
               productname: item.productname,
-              image: item.image[0],
+              image: Array.isArray(item.image) ? item.image[0] : item.image,
               price: item.price,
               size,
               quantity,
@@ -114,211 +119,288 @@ useEffect(() => {
           }
         });
       });
+
       const payload = {
         items: orderItems,
-        amount: totalProductPrice + delivery_fee,
+        amount: totalProductPrice + (delivery_fee || 0),
         address: placeData,
         paymentMethod: method,
       };
-      console.log(payload);
 
-      switch (method) {
-        //API CALL switch
-        case "cod":
-          try {
-            const res = await axios.post(
-              `${backend_API}/api/order/ordercod`,
-              payload
-            );
-            if (res.data) {
-              setCartData([]);
-              navigate("/orders");
-              showCartsData();
-              console.log(res.data);
-              toast.success(res.data.message);
-            } else {
-              toast.error(res.data.message);
-            }
-          } catch (error) {
-            console.log(error);
-            toast.error("Something went wrong");
-          }
-          break;
-        case "razorpay":
-          break;
-        case "stripe":
-          break;
+      if (method === "cod") {
+        const res = await axios.post(`${backend_API}/api/order/ordercod`, payload);
+        if (res.data) {
+          setCartData([]);
+          if (showCartsData) showCartsData();
+          toast.success(res.data.message || "Order placed successfully!");
+          navigate("/orders");
+        } else {
+          toast.error(res.data?.message || "Failed to place order.");
+        }
+      } else {
+        toast.info(`${method.toUpperCase()} payment gateway integration is in sandbox mode. Switching to COD.`);
+        setMethod("cod");
       }
-
-      setPlaceData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        country: "India",
-        state: "",
-        district: "",
-        pincode: "",
-        address: "",
-        phone: "",
-      });
     } catch (error) {
-      console.log(error);
+      console.error("Order submission error:", error);
+      toast.error(error.response?.data?.message || "Something went wrong while placing your order.");
+    } finally {
+      setLoading(false);
     }
   };
-  const [method, setMethod] = useState("cod");
 
   return (
-    <div className="flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min-h-[80vh] border-t ">
-      {/**left side */}
-      <div className="flex flex-col gap-4 w-full sm:w-[480px]">
-        <div className="text-x1 sm:text-2x1 my-3 ">
-          <Title text1={"DELIVERY"} text2={"INFORMATION"} />
-        </div>
-        <div className="flex gap-3">
-          <input
-            type="text"
-            name="firstName"
-            onChange={orderData}
-            value={placeData.firstName}
-            placeholder="First Name"
-            className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
-          />
-          <input
-            type="text"
-            name="lastName"
-            onChange={orderData}
-            value={placeData.lastName}
-            placeholder="Last Name"
-            className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
-          />
-        </div>
-        <input
-          type="email"
-          name="email"
-          onChange={orderData}
-          value={placeData.email}
-          placeholder="Email"
-          className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
-        />
-
-        <div className="flex gap-3">
-          <input
-            type="text "
-            placeholder="India"
-            name="country"
-            onChange={orderData}
-            value={placeData.country}
-            readOnly
-            className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
-          />
-
-          <select
-            className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
-            name="state"
-            onChange={orderData}
-            value={placeData.state}
-          >
-            <option value="">Select State</option>
-            {indiaData.states.map((state) => (
-              <option key={state} value={state}>
-                {state}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="flex gap-3">
-          <select
-            className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
-            onChange={orderData}
-            value={placeData.district}
-          >
-            <option value="">Select District</option>
-            {districtData.map((district) => (
-              <option key={district} value={district}>
-                {district}
-              </option>
-            ))}
-          </select>
-          <input
-            type="text"
-            name="pincode"
-            onChange={orderData}
-            value={placeData.pincode}
-            placeholder="Pin Code"
-            className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
-          />
-        </div>
-        <input
-          type="text"
-          placeholder="Address"
-          name="address"
-          onChange={orderData}
-          value={placeData.address}
-          className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
-        />
-        <input
-          type="text"
-          name="phone"
-          onChange={orderData}
-          value={placeData.phone}
-          placeholder="Phone Number"
-          className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
-        />
-      </div>
-      {/**Right side */}
-      <div className="mt-8">
-        <div className="mt-8 min-w-80">
-          <CardTotal />
-        </div>
-        <div className="mt-12">
-          <Title text1={"PAYMENT"} text2={"METHOD"} />
-          {/**payment method */}
-          <div className="flex gap-3 flex-col lg:flex-row">
-            <div
-              onClick={() => setMethod("stripe")}
-              className="flex items-center gap-3 border p-2 px-3 cursor-pointer"
-            >
-              <p
-                className={`min-w-3.5 h-3.5 border rounded-full ${
-                  method === "stripe" && "bg-green-400"
-                } `}
-              ></p>
-              <img className="h-5 mx-4" src={assets.stripe_logo} alt="" />
-            </div>
-            <div
-              onClick={() => setMethod("razorpay")}
-              className="flex items-center gap-3 border p-2 px-3 cursor-pointer"
-            >
-              <p
-                className={`min-w-3.5 h-3.5 border rounded-full ${
-                  method === "razorpay" && "bg-green-400"
-                }`}
-              ></p>
-              <img className="h-5 mx-4" src={assets.razorpay_logo} alt="" />
-            </div>
-            <div
-              onClick={() => setMethod("cod")}
-              className="flex items-center gap-3 border p-2 px-3 cursor-pointer"
-            >
-              <p
-                className={`min-w-3.5 h-3.5 border rounded-full ${
-                  method === "cod" && "bg-green-400"
-                }`}
-              ></p>
-              <p className="text-gray-500 text-sm font-medium mx-4">
-                Cash On Delivery
-              </p>
-            </div>
+    <div className="pt-8 pb-20">
+      <div className="flex flex-col lg:flex-row justify-between gap-10 lg:gap-14">
+        
+        {/* Left: Delivery Information Form */}
+        <div className="flex-1">
+          <div className="mb-6">
+            <Title text1={"DELIVERY"} text2={"INFORMATION"} />
+            <p className="text-xs text-gray-400 mt-1">Please enter your shipping address</p>
           </div>
-          <div className="w-full text-end mt-8">
+
+          <form onSubmit={submitData} className="space-y-4 max-w-xl">
+            
+            {/* First & Last Name */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">First Name *</label>
+                <input
+                  type="text"
+                  name="firstName"
+                  required
+                  onChange={orderData}
+                  value={placeData.firstName}
+                  placeholder="e.g. John"
+                  className="w-full px-4 py-2.5 bg-gray-50/60 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:border-black focus:ring-2 focus:ring-black/5 transition"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">Last Name</label>
+                <input
+                  type="text"
+                  name="lastName"
+                  onChange={orderData}
+                  value={placeData.lastName}
+                  placeholder="e.g. Doe"
+                  className="w-full px-4 py-2.5 bg-gray-50/60 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:border-black focus:ring-2 focus:ring-black/5 transition"
+                />
+              </div>
+            </div>
+
+            {/* Email & Phone */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">Email Address *</label>
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  onChange={orderData}
+                  value={placeData.email}
+                  placeholder="e.g. john@example.com"
+                  className="w-full px-4 py-2.5 bg-gray-50/60 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:border-black focus:ring-2 focus:ring-black/5 transition"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">Phone Number *</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  required
+                  onChange={orderData}
+                  value={placeData.phone}
+                  placeholder="e.g. +91 98765 43210"
+                  className="w-full px-4 py-2.5 bg-gray-50/60 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:border-black focus:ring-2 focus:ring-black/5 transition"
+                />
+              </div>
+            </div>
+
+            {/* Address */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5">Street Address *</label>
+              <input
+                type="text"
+                name="address"
+                required
+                onChange={orderData}
+                value={placeData.address}
+                placeholder="House / Flat No., Apartment, Landmark"
+                className="w-full px-4 py-2.5 bg-gray-50/60 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:border-black focus:ring-2 focus:ring-black/5 transition"
+              />
+            </div>
+
+            {/* State & District */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">State *</label>
+                <select
+                  name="state"
+                  required
+                  onChange={orderData}
+                  value={placeData.state}
+                  className="w-full px-4 py-2.5 bg-gray-50/60 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:border-black focus:ring-2 focus:ring-black/5 transition cursor-pointer"
+                >
+                  <option value="">Select State</option>
+                  {indiaData.states.map((state) => (
+                    <option key={state} value={state}>
+                      {state}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">District / City</label>
+                <select
+                  name="district"
+                  onChange={orderData}
+                  value={placeData.district}
+                  className="w-full px-4 py-2.5 bg-gray-50/60 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:border-black focus:ring-2 focus:ring-black/5 transition cursor-pointer"
+                >
+                  <option value="">Select District</option>
+                  {districtData.map((district) => (
+                    <option key={district} value={district}>
+                      {district}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Country & Pincode */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">Country</label>
+                <input
+                  type="text"
+                  name="country"
+                  value={placeData.country}
+                  readOnly
+                  className="w-full px-4 py-2.5 bg-gray-100/70 border border-gray-200 rounded-xl text-sm text-gray-500 cursor-not-allowed"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">PIN Code *</label>
+                <input
+                  type="text"
+                  name="pincode"
+                  required
+                  onChange={orderData}
+                  value={placeData.pincode}
+                  placeholder="e.g. 600001"
+                  className="w-full px-4 py-2.5 bg-gray-50/60 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:border-black focus:ring-2 focus:ring-black/5 transition"
+                />
+              </div>
+            </div>
+
+          </form>
+        </div>
+
+        {/* Right: Summary & Payment Selector */}
+        <div className="w-full lg:w-[420px] shrink-0">
+          
+          <CartTotal />
+
+          {/* Payment Method Selector */}
+          <div className="mt-8">
+            <div className="mb-4">
+              <Title text1={"PAYMENT"} text2={"METHOD"} />
+            </div>
+
+            <div className="grid grid-cols-1 gap-3">
+              
+              {/* Stripe */}
+              <div
+                onClick={() => setMethod("stripe")}
+                className={`flex items-center justify-between p-3.5 border rounded-2xl cursor-pointer transition ${
+                  method === "stripe"
+                    ? "border-black bg-black/5 shadow-xs"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                      method === "stripe" ? "border-black bg-black" : "border-gray-400"
+                    }`}
+                  >
+                    {method === "stripe" && <div className="w-1.5 h-1.5 bg-white rounded-full"></div>}
+                  </div>
+                  <span className="text-xs font-semibold text-gray-800">Credit / Debit Card</span>
+                </div>
+                <img className="h-5" src={assets.stripe_logo} alt="Stripe" />
+              </div>
+
+              {/* Razorpay */}
+              <div
+                onClick={() => setMethod("razorpay")}
+                className={`flex items-center justify-between p-3.5 border rounded-2xl cursor-pointer transition ${
+                  method === "razorpay"
+                    ? "border-black bg-black/5 shadow-xs"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                      method === "razorpay" ? "border-black bg-black" : "border-gray-400"
+                    }`}
+                  >
+                    {method === "razorpay" && <div className="w-1.5 h-1.5 bg-white rounded-full"></div>}
+                  </div>
+                  <span className="text-xs font-semibold text-gray-800">UPI / NetBanking</span>
+                </div>
+                <img className="h-5" src={assets.razorpay_logo} alt="Razorpay" />
+              </div>
+
+              {/* Cash On Delivery */}
+              <div
+                onClick={() => setMethod("cod")}
+                className={`flex items-center justify-between p-3.5 border rounded-2xl cursor-pointer transition ${
+                  method === "cod"
+                    ? "border-black bg-black/5 shadow-xs"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                      method === "cod" ? "border-black bg-black" : "border-gray-400"
+                    }`}
+                  >
+                    {method === "cod" && <div className="w-1.5 h-1.5 bg-white rounded-full"></div>}
+                  </div>
+                  <span className="text-xs font-semibold text-gray-800">Cash on Delivery (COD)</span>
+                </div>
+                <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">
+                  Recommended
+                </span>
+              </div>
+
+            </div>
+
+            {/* Place Order CTA */}
             <button
-              className="bg-black text-white px-16 py-3 text-sm"
+              type="button"
+              disabled={loading}
               onClick={submitData}
+              className="w-full mt-6 py-3.5 px-6 bg-black hover:bg-gray-800 text-white font-medium text-sm rounded-2xl shadow-lg hover:shadow-xl transition active:scale-[0.98] cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2"
             >
-              PLACE ORDER
+              {loading ? (
+                <span>Placing Order...</span>
+              ) : (
+                <>
+                  <span>CONFIRM & PLACE ORDER</span>
+                  <span>→</span>
+                </>
+              )}
             </button>
+
           </div>
+
         </div>
+
       </div>
     </div>
   );

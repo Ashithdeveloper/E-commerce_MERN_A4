@@ -9,24 +9,21 @@ const LatestCollection = () => {
 
   useEffect(() => {
     if (products && products.length > 0) {
-      const latest = [...products].slice(0, 10); 
+      const latest = [...products].slice(0, 10);
       setLatestProducts(latest);
     }
-  }, [products]); 
+  }, [products]);
 
   return (
-    <div className="my-10">
-      <div className="text-center py-8 text-3xl">
-        <Title text1={"LATEST"} text2={"COLLECTION"} />
-        <p className="w-3/4 m-auto text-xs md:text-base text-gray-600">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum aut
-          distinctio, voluptate iure laudantium veniam nostrum voluptatem animi
-          natus vitae alias non doloribus nisi qui laboriosam quia adipisci
-          labore fugit.
+    <section className="my-16">
+      <div className="text-center pb-8">
+        <Title text1={"LATEST"} text2={"DROPS"} />
+        <p className="max-w-xl mx-auto text-xs sm:text-sm text-gray-500 mt-2">
+          Explore our newly arrived essentials, thoughtfully designed for every occasion with premium fabrics and comfort.
         </p>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 ">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
         {latestProducts.map((product) => (
           <ProductItem
             key={product._id}
@@ -37,7 +34,7 @@ const LatestCollection = () => {
           />
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 
